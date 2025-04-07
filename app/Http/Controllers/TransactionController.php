@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Transaction;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
@@ -11,8 +14,22 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        $title = 'Transaksi';
-        return view('transaksi.index', compact('title'));
+        $query = Transaction::with('category:id,name,is_expense')
+            ->select('id', 'category_id', 'amount', 'date_trx', 'payment_method', 'type', 'description')
+            ->orderBy('date_trx', 'desc');
+
+        if (request('start') && request('end')) {
+            $start = Carbon::createFromFormat('d-m-Y', request('start'))->startOfDay();
+            $end = Carbon::createFromFormat('d-m-Y', request('end'))->endOfDay();
+
+            $query->whereBetween('date_trx', [$start, $end]);
+        }
+
+        $transaksi = $query->get();
+        $title = 'Catat Transaksi';
+        $category = Category::select('id', 'name')->get();
+
+        return view('transaksi.index', compact('title', 'category', 'transaksi'));
     }
 
     /**
@@ -28,7 +45,28 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'kategori' => 'required',
+            'nominal' => 'required',
+            'tanggal' => 'required',
+            'payment_method' => 'required',
+            'tipe' => 'required',
+            'deskripsi' => 'required',
+        ]);
+
+        $validated['user_id'] = 1;
+
+        Transaction::create([
+            'user_id' => $validated['user_id'],
+            'category_id' => $validated['kategori'],
+            'amount' => $validated['nominal'],
+            'date_trx' => Carbon::createFromFormat('m/d/Y', $validated['tanggal'])->format('Y-m-d'),
+            'payment_method' => $validated['payment_method'],
+            'type' => $validated['tipe'],
+            'description' => $validated['deskripsi'],
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'Transaksi berhasil dibuat']);
     }
 
     /**
@@ -52,7 +90,27 @@ class TransactionController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate([
+            'kategori' => 'required',
+            'nominal' => 'required',
+            'tanggal' => 'required',
+            'payment_method' => 'required',
+            'tipe' => 'required',
+            'deskripsi' => 'required',
+        ]);
+
+        $transaction = Transaction::findOrFail($id);
+
+        $transaction->update([
+            'category_id' => $validated['kategori'],
+            'amount' => $validated['nominal'],
+            'date_trx' => Carbon::parse($validated['tanggal'])->format('Y-m-d'),
+            'payment_method' => $validated['payment_method'],
+            'type' => $validated['tipe'],
+            'description' => $validated['deskripsi'],
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'Transaksi berhasil diupdate']);
     }
 
     /**
@@ -60,6 +118,8 @@ class TransactionController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $transaksi = Transaction::findOrFail($id);
+        $transaksi->delete();
+        return redirect()->back()->with('message', 'Berhasil menghapus data.');
     }
 }

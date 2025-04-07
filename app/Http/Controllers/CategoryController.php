@@ -12,7 +12,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return view('category.index');
+        $category = Category::select('id', 'name', 'is_expense')->get();
+        $title = 'Kategori';
+        return view('category.index', compact('category', 'title'));
     }
 
     /**
@@ -75,6 +77,6 @@ class CategoryController extends Controller
     {
         $category = Category::findOrFail($id);
         $category->delete();
-        return response()->json(['status' => true, 'message' => 'Kategori berhasil dihapus']);
+        return redirect()->back()->with('message', 'Kategori berhasil dihapus.');
     }
 }

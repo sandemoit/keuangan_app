@@ -8,34 +8,17 @@
 
     <title>{{ config('app.name', 'Aplikasi Keuangan') }}</title>
 
-    <link rel="stylesheet" href="{{ asset('style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-    {{-- Flowbite --}}
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
-
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
 
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-
-    <style>
-        .active-menu-item {
-            @apply bg-blue-700 text-white;
-        }
-
-        .menu-item {
-            @apply flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group;
-        }
-
-        .menu-icon {
-            @apply w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900;
-        }
-    </style>
+    {{-- Flowbite --}}
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
 
     <!-- Scripts -->
     @vite('resources/css/app.css')
@@ -84,6 +67,10 @@
         </main>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    {{-- Flowbite --}}
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
     @stack('custom-js')
 </body>
 

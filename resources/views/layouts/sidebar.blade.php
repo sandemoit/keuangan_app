@@ -52,7 +52,7 @@
                             class="menu-dropdown-item items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100">Harian</a>
                     </li>
                     <li>
-                        <a href="#"
+                        <a href="{{ route('laporan.bulanan') }}"
                             class="menu-dropdown-item items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100">Bulanan</a>
                     </li>
                     <li>
@@ -82,28 +82,28 @@
             <!-- Total Balance -->
             <div class="p-4 bg-gradient-to-r from-blue-100 to-blue-50 rounded-lg">
                 <p class="text-sm text-gray-500">Total Saldo</p>
-                <h4 class="text-xl font-bold text-blue-800">Rp 5,240,000</h4>
+                <h4 class="text-xl font-bold text-blue-800">{{ rupiah(saldo_sum('totalSaldo')) }}</h4>
             </div>
 
             <!-- Income -->
             <div class="flex items-center p-2 text-gray-900 rounded-lg group">
-                <div class="p-2 bg-green-100 rounded-lg">
-                    <i class="fas fa-arrow-up text-green-600"></i>
+                <div class="p-2 bg-red-100 rounded-lg">
+                    <i class="fas fa-arrow-up text-red-600"></i>
                 </div>
                 <div class="ml-3">
-                    <p class="text-xs text-gray-500">Pemasukan</p>
-                    <p class="text-sm font-medium">Rp 8,500,000</p>
+                    <p class="text-xs text-gray-500">Pengeluaran</p>
+                    <p class="text-sm font-medium">{{ rupiah(saldo_sum('totalExpense', date('Y-m'))) }}</p>
                 </div>
             </div>
 
             <!-- Expense -->
             <div class="flex items-center p-2 text-gray-900 rounded-lg group">
-                <div class="p-2 bg-red-100 rounded-lg">
-                    <i class="fas fa-arrow-down text-red-600"></i>
+                <div class="p-2 bg-green-100 rounded-lg">
+                    <i class="fas fa-arrow-down text-green-600"></i>
                 </div>
                 <div class="ml-3">
-                    <p class="text-xs text-gray-500">Pengeluaran</p>
-                    <p class="text-sm font-medium">Rp 3,260,000</p>
+                    <p class="text-xs text-gray-500">Pemasukan</p>
+                    <p class="text-sm font-medium">{{ rupiah(saldo_sum('totalIncome', date('Y-m'))) }}</p>
                 </div>
             </div>
         </div>

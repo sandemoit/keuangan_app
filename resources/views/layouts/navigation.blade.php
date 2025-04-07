@@ -1,5 +1,5 @@
 <!-- Navbar -->
-<nav class="fixed top-0 z-50 w-full bg-gradient-to-r from-blue-600 to-blue-800 border-b border-blue-200">
+<nav class="fixed top-0 z-50 w-full bg-gradient-to-r from-blue-600 to-blue-800">
     <div class="px-3 py-3 lg:px-5 lg:pl-3">
         <div class="flex items-center justify-between">
             <div class="flex items-center justify-start">

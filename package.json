@@ -12,13 +12,14 @@
         "concurrently": "^9.0.1",
         "laravel-vite-plugin": "^1.2.0",
         "postcss": "^8.5.3",
-        "tailwindcss": "^4.1.2",
-        "vite": "^6.2.4",
         "prettier": "^3.3.3",
-        "prettier-plugin-tailwindcss": "^0.6.11"
+        "prettier-plugin-tailwindcss": "^0.6.11",
+        "tailwindcss": "^4.1.2",
+        "vite": "^6.2.4"
     },
     "dependencies": {
         "@tailwindcss/postcss": "^4.1.2",
-        "flowbite": "^3.1.2"
+        "flowbite": "^3.1.2",
+        "simple-datatables": "^10.0.0"
     }
 }

@@ -2,8 +2,6 @@
 @import "flowbite/src/themes/default";
 @plugin "flowbite/plugin";
 /* @plugin "flowbite-typography"; */
-@source "../node_modules/flowbite";
-@source "../views";
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -11,7 +9,11 @@
 @source '../**/*.js';
 
 @custom-variant dark (&:where(.dark, .dark *));
+
+@source "../node_modules/flowbite";
+@source "../views";
 @source "../node_modules/flowbite-datepicker";
+@source "../node_modules/simple-datatables";
 
 @theme {
     --color-primary-50: #eff6ff;
