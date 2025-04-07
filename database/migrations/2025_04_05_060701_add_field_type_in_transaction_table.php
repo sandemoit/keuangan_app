@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('transactions', function (Blueprint $table) {
             $table->after('category_id', function (Blueprint $table) {
-                $table->enum('type', ['expense', 'income'])->default('expense');
+                $table->enum('type', ['expense', 'income'])->default('expense')->index();
                 $table->enum('payment_method', ['bank transfer', 'cash', 'e-wallet'])->default('cash');
             });
         });

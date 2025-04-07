@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->date('date_trx');
             $table->text('description')->nullable();
-            $table->decimal('amount', 15, 2);
+            $table->decimal('amount', 15, 2)->index();
             $table->softDeletes();
             $table->timestamps();
         });
