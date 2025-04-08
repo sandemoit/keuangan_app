@@ -27,11 +27,11 @@
                 </button>
                 <ul id="dropdown-finance" class="hidden px-10">
                     <li>
-                        <a href="#"
+                        <a href="{{ route('keuangan.masuk') }}"
                             class="menu-dropdown-item items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100">Pemasukan</a>
                     </li>
                     <li>
-                        <a href="#"
+                        <a href="{{ route('keuangan.keluar') }}"
                             class="menu-dropdown-item items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100">Pengeluaran</a>
                     </li>
                 </ul>
@@ -92,7 +92,7 @@
                 </div>
                 <div class="ml-3">
                     <p class="text-xs text-gray-500">Pengeluaran</p>
-                    <p class="text-sm font-medium">{{ rupiah(saldo_sum('totalExpense', date('Y-m'))) }}</p>
+                    <p class="text-sm font-medium">{{ rupiah(saldo_sum('income', date('Y-m'))) }}</p>
                 </div>
             </div>
 
@@ -103,7 +103,7 @@
                 </div>
                 <div class="ml-3">
                     <p class="text-xs text-gray-500">Pemasukan</p>
-                    <p class="text-sm font-medium">{{ rupiah(saldo_sum('totalIncome', date('Y-m'))) }}</p>
+                    <p class="text-sm font-medium">{{ rupiah(saldo_sum('expense', date('Y-m'))) }}</p>
                 </div>
             </div>
         </div>

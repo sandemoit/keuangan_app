@@ -58,6 +58,11 @@ class LaporanController extends Controller
             }], 'amount')
             ->get();
 
-        return view('laporan.bulanan', compact('title', 'saldoAwalBulanKemarin', 'pemasukan', 'pengeluaran', 'akumulasi', 'saldoAkhirBulanIni', 'kateogirExpense', 'kategoriIncome'));
+        $labelsIncome = $kategoriIncome->pluck('name'); // label: nama kategori
+        $dataIncome = $kategoriIncome->pluck('transactions_sum_amount');
+        $labelsExpense = $kateogirExpense->pluck('name'); // label: nama kategori
+        $dataExpense = $kateogirExpense->pluck('transactions_sum_amount');
+
+        return view('laporan.bulanan', compact('title', 'saldoAwalBulanKemarin', 'pemasukan', 'pengeluaran', 'akumulasi', 'saldoAkhirBulanIni', 'kateogirExpense', 'kategoriIncome', 'labelsExpense', 'dataExpense', 'labelsIncome', 'dataIncome'));
     }
 }

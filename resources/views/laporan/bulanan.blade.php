@@ -58,7 +58,7 @@
                 </div>
             </div>
             <!-- Donut Chart -->
-            <div class="py-6" id="donut-chart"></div>
+            <div class="py-6" id="donut-chart-pemasukan"></div>
         </div>
         <div class="bg-white shadow-md rounded-lg overflow-hidden p-6">
             <div class="flex justify-between mb-3">
@@ -68,7 +68,7 @@
                 </div>
             </div>
             <!-- Donut Chart -->
-            <div class="py-6" id="donut-chart"></div>
+            <div class="py-6" id="donut-chart-pengeluaran"></div>
         </div>
     </div>
 
@@ -122,8 +122,22 @@
         @endif
     </div>
 
+    @php
+        $income = saldo_sum('income', date('Y-m'));
+        $expense = saldo_sum('expense', date('Y-m'));
+    @endphp
+
     @push('custom-js')
         <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.46.0/dist/apexcharts.min.js"></script>
+        <script>
+            const pemasukan = {{ $income }};
+            const pengeluaran = {{ $expense }};
+            const kategoriLabelsPemasukan = {!! json_encode($labelsIncome) !!};
+            const kategoriDataPemasukan = {!! json_encode($dataIncome) !!};
+            const kategoriLabelsPengeluaran = {!! json_encode($labelsExpense) !!};
+            const kategoriDataPengeluaran = {!! json_encode($dataExpense) !!};
+        </script>
+
         <script src="{{ asset('js/chart_laporan.js') }}"></script>
     @endpush
 </x-master-layout>

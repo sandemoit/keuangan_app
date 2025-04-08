@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\KeuanganController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
@@ -16,3 +17,6 @@ Route::delete('/transaksi/{id}', [TransactionController::class, 'destroy'])->nam
 Route::resource('/category', CategoryController::class);
 
 Route::get('/laporan/bulanan', [LaporanController::class, 'laporanBulanan'])->name('laporan.bulanan');
+
+Route::get('/keuangan/masuk', [KeuanganController::class, 'masuk'])->name('keuangan.masuk');
+Route::get('/keuangan/keluar', [KeuanganController::class, 'keluar'])->name('keuangan.keluar');
