@@ -2,18 +2,14 @@
     <link href="https://cdn.datatables.net/1.13.6/css/dataTables.tailwindcss.min.css" rel="stylesheet" />
 @endpush
 <x-master-layout :title="$title">
-    <div id="accordion-collapse" data-accordion="collapse" class="py-4">
+
+    <div id="accordion-collapse" data-accordion="collapse" class="mt-4">
         <h2 id="accordion-collapse-heading-1">
             <button type="button"
-                class="flex items-center justify-between w-full p-5 font-medium rtl:text-right bg-white text-blue-800 border border-gray-200 rounded-t-xl dark:border-gray-700 dark:text-gray-400 hover:bg-white dark:hover:bg-gray-800 gap-3"
+                class="flex items-center justify-between w-full p-5 font-medium rtl:text-right bg-white text-blue-800 shadow-sm rounded-t-xl dark:border-gray-700 dark:text-gray-400 hover:bg-white dark:hover:bg-gray-800 gap-3"
                 data-accordion-target="#accordion-collapse-body-1" aria-expanded="false"
                 aria-controls="accordion-collapse-body-1">
-                <span>Buat Kategori Disini</span>
-                <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 5 5 1 1 5" />
-                </svg>
+                <span><i class="fa-regular fa-square-plus"></i> Buat Kategori Disini</span>
             </button>
         </h2>
         <div id="accordion-collapse-body-1" class="hidden" aria-labelledby="accordion-collapse-heading-1">
@@ -48,7 +44,7 @@
         </div>
     </div>
 
-    <div class="w-full bg-white rounded-xl shadow-sm p-5">
+    <div class="w-full bg-white rounded-xl rounded-t-none shadow-sm p-5">
         <table id="categoryTabel">
             <thead>
                 <tr>
