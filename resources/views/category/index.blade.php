@@ -3,7 +3,7 @@
 @endpush
 <x-master-layout :title="$title">
 
-    <div id="accordion-collapse" data-accordion="collapse" class="mt-4">
+    <div id="accordion-collapse" data-accordion="collapse">
         <h2 id="accordion-collapse-heading-1">
             <button type="button"
                 class="flex items-center justify-between w-full p-5 font-medium rtl:text-right bg-white text-blue-800 shadow-sm rounded-t-xl dark:border-gray-700 dark:text-gray-400 hover:bg-white dark:hover:bg-gray-800 gap-3"

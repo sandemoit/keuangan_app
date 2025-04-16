@@ -3,8 +3,8 @@
     class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0"
     aria-label="Sidebar">
     <div class="h-full px-3 pb-4 overflow-y-auto bg-white">
-        <h3 class="mb-4 text-xs leading-[20px] text-gray-400 uppercase">MENU</h3>
-        <ul class="mb-6 flex flex-col gap-4">
+        <h3 class="text-xs leading-[20px] text-gray-400 uppercase">MENU</h3>
+        <ul class="mb-6 flex flex-col gap-3">
             <li>
                 <a href="{{ route('dashboard') }}" class="menu-item active-menu-item">
                     <i class="fas fa-home menu-icon"></i>
@@ -41,14 +41,12 @@
                     class="menu-item flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg group"
                     aria-controls="dropdown-report" data-collapse-toggle="dropdown-report">
                     <i class="fas fa-chart-pie menu-icon"></i>
-                    <span class="flex-1 ml-3 text-left whitespace-nowrap">Laporan</span>
-                    <span
-                        class="inline-flex items-center justify-center px-2 ml-3 text-sm font-medium text-gray-800 bg-green-200 rounded-full">New</span>
+                    <span class="flex-1 ml-3 text-left whitespace-nowrap">Laporan Kas</span>
                     <i class="fas fa-chevron-down w-4 h-4"></i>
                 </button>
                 <ul id="dropdown-report" class="hidden px-10">
                     <li>
-                        <a href="#"
+                        <a href="{{ route('laporan.harian') }}"
                             class="menu-dropdown-item items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100">Harian</a>
                     </li>
                     <li>
@@ -62,6 +60,21 @@
                 </ul>
             </li>
             <li>
+                <a href="{{ route('target-keuangan.index') }}" class="menu-item active-menu-item">
+                    <i class="fa-solid fa-piggy-bank"></i>
+                    <span class="ml-3">Target Keuangan</span>
+                    <span
+                        class="inline-flex items-center justify-center px-2 text-sm font-medium text-gray-800 bg-green-200 rounded-full">New</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('reminder-keuangan.index') }}" class="menu-item active-menu-item">
+                    <i class="fas fa-coins"></i>
+                    <span class="ml-3">Reminder Keuangan</span>
+                </a>
+            </li>
+            <h3 class="text-xs leading-[20px] text-gray-400 uppercase">PENGATURAN</h3>
+            <li>
                 <a href="{{ route('category.index') }}" class="menu-item">
                     <i class="fas fa-tag menu-icon"></i>
                     <span class="ml-3">Kategori</span>
@@ -69,20 +82,20 @@
             </li>
             <li>
                 <a href="#" class="menu-item">
-                    <i class="fas fa-cog menu-icon"></i>
-                    <span class="ml-3">Pengaturan</span>
+                    <i class="fas fa-user menu-icon"></i>
+                    <span class="ml-3">Akun Saya</span>
                 </a>
             </li>
         </ul>
 
         <!-- Quick Stats -->
         <div class="pt-5 mt-5 space-y-2 border-t border-gray-200">
-            <h3 class="mb-4 text-xs leading-[20px] text-gray-400 uppercase">RINGKASAN</h3>
+            <h3 class="text-xs leading-[20px] text-gray-400 uppercase">RINGKASAN</h3>
 
             <!-- Total Balance -->
             <div class="p-4 bg-gradient-to-r from-blue-100 to-blue-50 rounded-lg">
-                <p class="text-sm text-gray-500">Total Saldo</p>
-                <h4 class="text-xl font-bold text-blue-800">{{ rupiah(saldo_sum('totalSaldo')) }}</h4>
+                <p class="text-sm text-gray-500">Saldo</p>
+                <h4 class="text-xl font-bold text-blue-800">{{ rupiah(saldo_sum('saldo', date('Y-m'))) }}</h4>
             </div>
 
             <!-- Income -->
@@ -92,7 +105,7 @@
                 </div>
                 <div class="ml-3">
                     <p class="text-xs text-gray-500">Pengeluaran</p>
-                    <p class="text-sm font-medium">{{ rupiah(saldo_sum('income', date('Y-m'))) }}</p>
+                    <p class="text-sm font-medium">{{ rupiah(saldo_sum('expense', date('Y-m'))) }}</p>
                 </div>
             </div>
 
@@ -103,7 +116,7 @@
                 </div>
                 <div class="ml-3">
                     <p class="text-xs text-gray-500">Pemasukan</p>
-                    <p class="text-sm font-medium">{{ rupiah(saldo_sum('expense', date('Y-m'))) }}</p>
+                    <p class="text-sm font-medium">{{ rupiah(saldo_sum('income', date('Y-m'))) }}</p>
                 </div>
             </div>
         </div>

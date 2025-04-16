@@ -1,38 +1,47 @@
 <?php
 
+use App\Models\Laporan;
 use App\Models\Transaction;
+use Carbon\Carbon;
 
 if (! function_exists('saldo_sum')) {
     function saldo_sum($jenisTotal, $date = null)
     {
         $dateNow = date('Y-m');
+        $now = Carbon::now();
+
+        $datePattern = $date == Carbon::now()->format('Y-m-d') ? '%Y-%m-%d' : '%Y-%m';
 
         $pemasukan = Transaction::query()
-            ->when($date, function ($query, $date) use ($dateNow) {
+            ->when($date, function ($query, $date) use ($dateNow, $datePattern) {
                 if ($date === $dateNow) {
-                    return $query->whereRaw("DATE_FORMAT(date_trx, '%Y-%m') = ?", [$dateNow]);
+                    return $query->whereRaw("DATE_FORMAT(date_trx, '$datePattern') = ?", [$dateNow]);
                 }
-                return $query->whereRaw("DATE_FORMAT(date_trx, '%Y-%m') = ?", [$date]);
+                return $query->whereRaw("DATE_FORMAT(date_trx, '$datePattern') = ?", [$date]);
             })
             ->where('type', 'income')
             ->sum('amount');
 
         $pengeluaran = Transaction::query()
-            ->when($date, function ($query, $date) use ($dateNow) {
+            ->when($date, function ($query, $date) use ($dateNow, $datePattern) {
                 if ($date === $dateNow) {
-                    return $query->whereRaw("DATE_FORMAT(date_trx, '%Y-%m') = ?", [$dateNow]);
+                    return $query->whereRaw("DATE_FORMAT(date_trx, '$datePattern') = ?", [$dateNow]);
                 }
-                return $query->whereRaw("DATE_FORMAT(date_trx, '%Y-%m') = ?", [$date]);
+                return $query->whereRaw("DATE_FORMAT(date_trx, '$datePattern') = ?", [$date]);
             })
             ->where('type', 'expense')
             ->sum('amount');
+
+        $saldoBulanLalu = Laporan::where('bulan', Carbon::now()->subMonth()->format('m'))->where('tahun', $now->year)->value('saldo') ?? 0;
 
         switch ($jenisTotal) {
             case 'income':
                 return $pemasukan;
             case 'expense':
                 return $pengeluaran;
-            case 'totalSaldo':
+            case 'saldo':
+                return $pemasukan + $saldoBulanLalu - $pengeluaran;
+            case 'selisih':
                 return $pemasukan - $pengeluaran;
             default:
                 return 0;

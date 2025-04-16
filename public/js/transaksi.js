@@ -33,6 +33,7 @@ document.querySelectorAll('.btn-edit').forEach(button => {
         document.getElementById('kategori').value = this.getAttribute('data-kategori');
         document.getElementById('payment_method').value = this.getAttribute('data-payment');
         document.getElementById('deskripsi').value = this.getAttribute('data-deskripsi');
+        document.getElementById('target_keuangan').value = this.getAttribute('data-target-keuangan');
         
         // Scroll ke form
         document.getElementById('accordion-collapse-body-1').scrollIntoView({ 
@@ -60,7 +61,7 @@ document.querySelectorAll('.btn-edit').forEach(button => {
 // Fungsi untuk reset form
 function resetForm() {
     document.getElementById('transaksi_id').value = '';
-    document.querySelector('form').reset();
+    document.getElementById('form-transaksi').reset();
     
     // Kembalikan teks tombol
     document.getElementById('btnSave').textContent = 'Simpan';

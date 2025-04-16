@@ -7,7 +7,7 @@
 @endphp
 
 <x-master-layout :title="$title">
-    <div class="w-full bg-white rounded-xl shadow-sm p-3 my-4">
+    <div class="w-full bg-white rounded-xl shadow-sm p-3 mb-4">
         <form id="filterTanggalForm" action="{{ route('keuangan.masuk') }}" method="GET">
             <div id="date-range-picker" date-rangepicker class="flex items-center mb-3">
                 <div class="relative">
@@ -43,7 +43,7 @@
         </form>
     </div>
 
-    <div class="w-full bg-white rounded-xl shadow-sm p-5 mt-4">
+    <div class="w-full bg-white rounded-xl shadow-sm p-5">
         <table id="keuanganMasuk">
             <thead>
                 <tr>

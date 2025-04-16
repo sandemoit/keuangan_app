@@ -6,7 +6,7 @@
     $end = request('end') ? \Carbon\Carbon::parse(request('end'))->format('d-m-Y') : '';
 @endphp
 <x-master-layout :title="$title">
-    <div class="w-full bg-white rounded-xl shadow-sm p-3 my-4">
+    <div class="w-full bg-white rounded-xl shadow-sm p-3 mb-4">
         <form id="filterTanggalForm" action="{{ route('transaksi') }}" method="GET">
             <div id="date-range-picker" date-rangepicker class="flex items-center mb-3">
                 <div class="relative">
@@ -77,7 +77,8 @@
                                     </svg>
                                 </div>
                                 <input id="tanggal" name="tanggal" datepicker datepicker-buttons
-                                    datepicker-autoselect-today type="text"
+                                    datepicker-autoselect-today value="{{ $start }}"
+                                    datepicker-format="dd-mm-yyyy" type="text"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="Pilih tanggal">
                             </div>
@@ -111,12 +112,24 @@
                             </select>
                         </div>
                         <div class="group">
-                            <label for="deskripsi"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi</label>
-                            <input type="text" id="deskripsi" name="deskripsi"
-                                class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light"
-                                placeholder="Keterangan Transaksi" required />
+                            <label for="target_keuangan"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Target Keuangan
+                                (Tidak Wajib)</label>
+                            <select id="target_keuangan" name="target_keuangan"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option disabled selected>Pilih jika ada</option>
+                                @foreach ($targetKeuangan as $target)
+                                    <option value="{{ $target->id }}">{{ $target->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
+                    </div>
+                    <div class="group mt-4">
+                        <label for="deskripsi"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi</label>
+                        <input type="text" id="deskripsi" name="deskripsi"
+                            class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light"
+                            placeholder="Keterangan Transaksi" required />
                     </div>
                     <button type="submit" id="btnSave"
                         class="mt-5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Simpan</button>
@@ -163,7 +176,8 @@
             </thead>
             <tbody>
                 @foreach ($transaksi as $transaksi)
-                    <tr class="{{ $transaksi->category->is_expense ? 'bg-red-200' : 'bg-green-200' }}">
+                    <tr
+                        class="{{ isset($transaksi->category) ? ($transaksi->category->is_expense ? 'bg-red-200' : 'bg-green-200') : 'bg-slate-200' }}">
                         <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ $loop->iteration }}
                         </td>
@@ -171,7 +185,7 @@
                             {{ tanggal_hari($transaksi->date_trx) }}
                         </td>
                         <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {{ $transaksi->category->name }}
+                            {{ $transaksi->category->name ?? 'Deleted' }}
                         </td>
                         <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ $transaksi->description }}
@@ -183,11 +197,12 @@
                             <div class="flex gap-4">
                                 <button href="#" class="btn-edit text-blue-600 hover:text-blue-900"
                                     data-id="{{ $transaksi->id }}" data-tanggal="{{ $transaksi->date_trx }}"
-                                    data-tipe="{{ $transaksi->category->is_expense ? 'expense' : 'income' }}"
-                                    data-kategori="{{ $transaksi->category->id }}"
+                                    data-tipe="{{ isset($transaksi->category) && $transaksi->category->is_expense ? 'expense' : 'income' }}"
+                                    data-kategori="{{ isset($transaksi->category) ? $transaksi->category->id : null }}"
                                     data-nominal="{{ $transaksi->amount }}"
                                     data-payment="{{ $transaksi->payment_method ?? 'cash' }}"
                                     data-deskripsi="{{ $transaksi->description }}"
+                                    data-target-keuangan="{{ $transaksi->description ?? null }}"
                                     class="btn-edit text-blue-600 hover:text-blue-900 mr-2">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </button>

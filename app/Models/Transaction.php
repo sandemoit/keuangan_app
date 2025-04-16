@@ -15,6 +15,7 @@ class Transaction extends Model
         'date_trx',
         'type',
         'payment_method',
+        'target_id'
     ];
 
     public function user(): BelongsTo

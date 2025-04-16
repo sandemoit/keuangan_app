@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Target;
 use App\Models\Transaction;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class TransactionController extends Controller
     {
         $query = Transaction::with('category:id,name,is_expense')
             ->select('id', 'category_id', 'amount', 'date_trx', 'payment_method', 'type', 'description')
-            ->orderBy('date_trx', 'desc');
+            ->orderByDesc('date_trx');
 
         if (request('start') && request('end')) {
             $start = Carbon::createFromFormat('d-m-Y', request('start'))->startOfDay();
@@ -29,7 +30,9 @@ class TransactionController extends Controller
         $title = 'Catat Transaksi';
         $category = Category::select('id', 'name')->get();
 
-        return view('transaksi.index', compact('title', 'category', 'transaksi'));
+        $targetKeuangan = Target::where('status', 'open')->get();
+
+        return view('transaksi.index', compact('title', 'category', 'transaksi', 'targetKeuangan'));
     }
 
     /**
@@ -60,10 +63,11 @@ class TransactionController extends Controller
             'user_id' => $validated['user_id'],
             'category_id' => $validated['kategori'],
             'amount' => $validated['nominal'],
-            'date_trx' => Carbon::createFromFormat('m/d/Y', $validated['tanggal'])->format('Y-m-d'),
+            'date_trx' => Carbon::createFromFormat('d-m-Y', $validated['tanggal'])->format('Y-m-d'),
             'payment_method' => $validated['payment_method'],
             'type' => $validated['tipe'],
             'description' => $validated['deskripsi'],
+            'target_id' => $request->target_keuangan
         ]);
 
         return response()->json(['success' => true, 'message' => 'Transaksi berhasil dibuat']);
@@ -103,6 +107,7 @@ class TransactionController extends Controller
 
         $transaction->update([
             'category_id' => $validated['kategori'],
+            'target_id' => $request->target_keuangan,
             'amount' => $validated['nominal'],
             'date_trx' => Carbon::parse($validated['tanggal'])->format('Y-m-d'),
             'payment_method' => $validated['payment_method'],

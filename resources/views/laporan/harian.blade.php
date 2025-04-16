@@ -13,10 +13,10 @@
             <table class="w-full text-sm text-left text-gray-700">
                 <tbody>
                     <tr class="border-b">
-                        <td class="px-4 py-2">Saldo awal bulan</td>
+                        <td class="px-4 py-2">Saldo awal hari</td>
                         <td class="px-4 py-2 text-right"colspan="2">Rp</td>
                         <td class="px-4 py-2 text-right"></td>
-                        <td class="px-4 py-2 text-right">{{ rupiah($saldoAwalBulanKemarin) }}</td>
+                        <td class="px-4 py-2 text-right">{{ rupiah($saldoAwalHariKemarin) }}</td>
                     </tr>
 
                     <tr class="bg-green-100 border-b">
@@ -42,11 +42,11 @@
                     </tr>
 
                     <tr>
-                        <td class="px-4 py-2">Saldo akhir bulan</td>
+                        <td class="px-4 py-2">Saldo akhir hari</td>
                         <td class="px-4 py-2 text-right" colspan="2">Rp</td>
                         <td class="px-4 py-2 text-right"></td>
                         <td class="px-4 py-2 text-right">
-                            {{ $saldoAkhirBulanIni }}
+                            {{ $saldoAkhirHariIni }}
                         </td>
                     </tr>
                 </tbody>
@@ -110,7 +110,7 @@
                         @endforeach
                         <tr class="bg-gray-100 font-bold">
                             <td class="px-4 py-2 text-right" colspan="2">Rp</td>
-                            <td class="px-4 py-2 text-right">{{ rupiah(saldo_sum('income', date('Y-m'))) }}</td>
+                            <td class="px-4 py-2 text-right">{{ rupiah(saldo_sum('income', date('Y-m-d'))) }}</td>
                         </tr>
                     </tbody>
                 @else
@@ -134,7 +134,7 @@
                         @endforeach
                         <tr class="bg-gray-100 font-bold">
                             <td class="px-4 py-2 text-right" colspan="2">Rp</td>
-                            <td class="px-4 py-2 text-right">{{ rupiah(saldo_sum('expense', date('Y-m'))) }}</td>
+                            <td class="px-4 py-2 text-right">{{ rupiah(saldo_sum('expense', date('Y-m-d'))) }}</td>
                         </tr>
                     </tbody>
                 @else
@@ -143,6 +143,7 @@
                     </div>
                 @endif
             </table>
+
         </div>
     </div>
 
@@ -159,6 +160,6 @@
             const kategoriColorsPengeluaran = {!! json_encode($colorsExpense) !!};
         </script>
 
-        <script src="{{ asset('js/chart_laporan_bulanan.js') }}"></script>
+        <script src="{{ asset('js/chart_laporan_harian.js') }}"></script>
     @endpush
 </x-master-layout>
