@@ -15,7 +15,7 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        $query = Transaction::with('category:id,name,is_expense')
+        $query = Transaction::with(['category:id,name,is_expense', 'target:id,name,target_amount'])
             ->select('id', 'category_id', 'amount', 'date_trx', 'payment_method', 'type', 'description')
             ->orderByDesc('date_trx');
 
@@ -49,7 +49,6 @@ class TransactionController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'kategori' => 'required',
             'nominal' => 'required',
             'tanggal' => 'required',
             'payment_method' => 'required',
@@ -61,11 +60,11 @@ class TransactionController extends Controller
 
         Transaction::create([
             'user_id' => $validated['user_id'],
-            'category_id' => $validated['kategori'],
+            'category_id' => request('kategori') ?? 3,
             'amount' => $validated['nominal'],
             'date_trx' => Carbon::createFromFormat('d-m-Y', $validated['tanggal'])->format('Y-m-d'),
             'payment_method' => $validated['payment_method'],
-            'type' => $validated['tipe'],
+            'type' => $validated['tipe'] == 'target' ? 'expense' : $validated['tipe'],
             'description' => $validated['deskripsi'],
             'target_id' => $request->target_keuangan
         ]);

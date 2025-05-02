@@ -28,6 +28,11 @@ class Transaction extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function target(): BelongsTo
+    {
+        return $this->belongsTo(Target::class);
+    }
+
     public function scopeIncomes($query)
     {
         return $query->whereHas('category', function ($query) {

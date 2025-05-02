@@ -4,7 +4,7 @@ $.ajaxSetup({
     }
 });
 
-if (document.getElementById("transaksiTabel") && typeof simpleDatatables.DataTable !== 'undefined') { 
+if (document.getElementById("transaksiTabel") && typeof simpleDatatables.DataTable !== 'undefined') {
     const dataTable = new simpleDatatables.DataTable("#transaksiTabel", {
         searchable: true,
         paging: true,
@@ -16,15 +16,15 @@ if (document.getElementById("transaksiTabel") && typeof simpleDatatables.DataTab
 
 // Tangkap semua tombol edit
 document.querySelectorAll('.btn-edit').forEach(button => {
-    button.addEventListener('click', function() {
+    button.addEventListener('click', function () {
         // Ambil accordion element
         const accordion = document.getElementById('accordion-collapse-heading-1').querySelector('button');
-        
+
         // Buka accordion jika masih tertutup
         if (accordion.getAttribute('aria-expanded') === 'false') {
             accordion.click();
         }
-        
+
         // Isi form dengan data transaksi
         document.getElementById('transaksi_id').value = this.getAttribute('data-id');
         document.getElementById('tipe').value = this.getAttribute('data-tipe');
@@ -34,17 +34,17 @@ document.querySelectorAll('.btn-edit').forEach(button => {
         document.getElementById('payment_method').value = this.getAttribute('data-payment');
         document.getElementById('deskripsi').value = this.getAttribute('data-deskripsi');
         document.getElementById('target_keuangan').value = this.getAttribute('data-target-keuangan');
-        
+
         // Scroll ke form
-        document.getElementById('accordion-collapse-body-1').scrollIntoView({ 
+        document.getElementById('accordion-collapse-body-1').scrollIntoView({
             behavior: 'smooth',
             block: 'start'
         });
-        
+
         // Ubah teks tombol simpan untuk menunjukkan mode edit
         const btnSave = document.getElementById('btnSave');
         btnSave.textContent = 'Perbarui';
-        
+
         // Tambahkan tombol batal (opsional)
         if (!document.getElementById('btnCancel')) {
             const btnCancel = document.createElement('button');
@@ -62,10 +62,10 @@ document.querySelectorAll('.btn-edit').forEach(button => {
 function resetForm() {
     document.getElementById('transaksi_id').value = '';
     document.getElementById('form-transaksi').reset();
-    
+
     // Kembalikan teks tombol
     document.getElementById('btnSave').textContent = 'Simpan';
-    
+
     // Hapus tombol batal jika ada
     const btnCancel = document.getElementById('btnCancel');
     if (btnCancel) {
@@ -73,7 +73,7 @@ function resetForm() {
     }
 }
 
-$('#form-transaksi').on('submit', function(e) {
+$('#form-transaksi').on('submit', function (e) {
     e.preventDefault();
 
     const isEdit = $('#transaksi_id').val() !== '';
@@ -97,19 +97,19 @@ $('#form-transaksi').on('submit', function(e) {
         data: formData,
         contentType: false,
         processData: false,
-        success: function(response) {
+        success: function (response) {
             alert(response.message || 'Data berhasil disimpan');
             resetForm(); // Fungsi custom untuk reset form
             location.reload(); // Atau update tabel manual
         },
-        error: function(xhr) {
+        error: function (xhr) {
             let errorMessage = 'Terjadi kesalahan saat menyimpan data.';
             if (xhr.responseJSON?.errors) {
                 errorMessage = Object.values(xhr.responseJSON.errors).flat().join('\n');
             }
             alert(errorMessage);
         },
-        complete: function() {
+        complete: function () {
             submitButton.prop('disabled', false).text(isEdit ? 'Update' : 'Simpan');
         }
     });
@@ -119,91 +119,122 @@ $('#form-transaksi').on('submit', function(e) {
 function loadTransactionsByDateRange() {
     const startDate = document.getElementById('start_date').value;
     const endDate = document.getElementById('end_date').value;
-    
+
     // Hanya kirim request jika kedua tanggal sudah diisi
     if (startDate && endDate) {
         // Tampilkan loading spinner (opsional)
         // document.getElementById('loading-spinner').classList.remove('hidden');
-        
+
         // Perbarui URL dengan parameter query string
         const url = new URL(window.location);
         url.searchParams.set('start', startDate);
         url.searchParams.set('end', endDate);
-        
+
         // Gunakan history.pushState untuk memperbarui URL tanpa me-refresh halaman
         window.history.pushState({}, '', url);
-        
+
         // Lakukan fetch request ke server
         fetch(`${window.location.pathname}?start=${startDate}&end=${endDate}`, {
             headers: {
                 'X-Requested-With': 'XMLHttpRequest' // Header untuk menandai request AJAX
             }
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.text();
-        })
-        .then(html => {
-            // Untuk versi AJAX sederhana, perbarui tabel transaksi
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-            
-            // Ganti konten tabel dengan hasil dari server
-            const tableContent = doc.querySelector('#transaction-table-content');
-            if (tableContent) {
-                document.querySelector('#transaction-table-content').innerHTML = tableContent.innerHTML;
-            }
-            
-            // Sembunyikan loading spinner (opsional)
-            // document.getElementById('loading-spinner').classList.add('hidden');
-        })
-        .catch(error => {
-            console.error('Error fetching data:', error);
-            alert('Error fetching data');
-            // Tampilkan pesan error (opsional)
-            
-            // Sembunyikan loading spinner (opsional)
-            // document.getElementById('loading-spinner').classList.add('hidden');
-        });
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(html => {
+                // Untuk versi AJAX sederhana, perbarui tabel transaksi
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+
+                // Ganti konten tabel dengan hasil dari server
+                const tableContent = doc.querySelector('#transaction-table-content');
+                if (tableContent) {
+                    document.querySelector('#transaction-table-content').innerHTML = tableContent.innerHTML;
+                }
+
+                // Sembunyikan loading spinner (opsional)
+                // document.getElementById('loading-spinner').classList.add('hidden');
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                alert('Error fetching data');
+                // Tampilkan pesan error (opsional)
+
+                // Sembunyikan loading spinner (opsional)
+                // document.getElementById('loading-spinner').classList.add('hidden');
+            });
     }
 }
 
 // Event listener untuk datepicker
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Tambahkan event listener untuk input tanggal awal
     const startDateInput = document.getElementById('start_date');
     if (startDateInput) {
-        startDateInput.addEventListener('changeDate', function() {
+        startDateInput.addEventListener('changeDate', function () {
             // Cek apakah tanggal akhir sudah diisi
             if (document.getElementById('end_date').value) {
                 loadTransactionsByDateRange();
             }
         });
     }
-    
+
     // Tambahkan event listener untuk input tanggal akhir
     const endDateInput = document.getElementById('end_date');
     if (endDateInput) {
-        endDateInput.addEventListener('changeDate', function() {
+        endDateInput.addEventListener('changeDate', function () {
             // Cek apakah tanggal awal sudah diisi
             if (document.getElementById('start_date').value) {
                 loadTransactionsByDateRange();
             }
         });
     }
-    
+
     // Inisialisasi nilai input dari URL jika ada
     const urlParams = new URLSearchParams(window.location.search);
     const startParam = urlParams.get('start');
     const endParam = urlParams.get('end');
-    
+
     if (startParam) {
         startDateInput.value = startParam;
     }
-    
+
     if (endParam) {
         endDateInput.value = endParam;
     }
+});
+
+$(document).ready(function () {
+    $('#tipe').on('change', function () {
+        const tipe = $(this).val(); // income / expense / target
+
+        if (tipe === 'target') {
+            // Disable dan clear kategori
+            $('#kategori').prop('disabled', true).empty().append('<option selected>Tidak tersedia</option>');
+            return;
+        }
+
+        // Jika bukan target, enable kategori dan fetch data
+        $('#kategori').prop('disabled', false);
+        const is_expense = (tipe === 'expense') ? 1 : 0;
+
+        $.ajax({
+            url: '/get-kategori',
+            method: 'GET',
+            data: { is_expense: is_expense },
+            success: function (res) {
+                $('#kategori').empty();
+                res.forEach(function (item) {
+                    $('#kategori').append(`<option value="${item.id}">${item.name}</option>`);
+                });
+            },
+            error: function () {
+                alert('Gagal ambil data kategori');
+            }
+        });
+    });
 });

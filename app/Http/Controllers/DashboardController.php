@@ -6,7 +6,6 @@ use App\Models\Category;
 use App\Models\FinancialReminder;
 use App\Models\Transaction;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {

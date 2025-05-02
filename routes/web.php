@@ -15,6 +15,11 @@ Route::post('/transaksi', [TransactionController::class, 'store'])->name('transa
 Route::get('/transaksi/data', [TransactionController::class, 'data'])->name('data');
 Route::put('/transaksi/{id}', [TransactionController::class, 'update'])->name('transaksi.update');
 Route::delete('/transaksi/{id}', [TransactionController::class, 'destroy'])->name('transaksi.destroy');
+Route::get('/get-kategori', function () {
+  $kategori = \App\Models\Category::where('is_expense', request('is_expense'))->get();
+  return response()->json($kategori);
+});
+
 
 Route::resource('/category', CategoryController::class);
 
