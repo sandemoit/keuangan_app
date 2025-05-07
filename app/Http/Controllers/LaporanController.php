@@ -96,54 +96,69 @@ class LaporanController extends Controller
         ));
     }
 
-    public function laporanBulanan()
+    public function laporanBulanan(Request $request)
     {
         $title = 'Laporan Transaksi Bulanan';
-        // Kurangi 1 bulan
-        $now = Carbon::now();
-        $bulan = Carbon::now()->subMonth()->format('m');
-        $bulans = $now->month;
-        $tahun = $now->year;
+
+        // Get filter parameters or use current date as default
+        $selectedMonth = $request->input('month', date('m'));
+        $selectedYear = $request->input('year', date('Y'));
+
+        // Create a Carbon instance for the selected month and year
+        $selectedDate = Carbon::createFromDate($selectedYear, $selectedMonth, 1);
+
+        // Get previous month for initial balance calculation
+        $prevMonth = (clone $selectedDate)->subMonth();
+        $prevMonthFormatted = $prevMonth->format('m');
+        $prevYearFormatted = $prevMonth->format('Y');
 
         // Get the initial balance from the previous month's report
-        $saldoAwalBulanKemarin = Laporan::where('bulan', $bulan)->where('tahun', $tahun)->value('saldo') ?? 0;
-        $pemasukan = saldo_sum('income', date('Y-m'));
-        $pengeluaran = saldo_sum('expense', date('Y-m'));
-        $akumulasi = saldo_sum('selisih', date('Y-m'));
-        $saldoAkhirBulanIni = $saldoAwalBulanKemarin + $pemasukan - $pengeluaran;
+        $saldoAwalBulan = Laporan::where('bulan', $prevMonthFormatted)
+            ->where('tahun', $prevYearFormatted)
+            ->value('saldo') ?? 0;
+
+        // Format for database queries
+        $selectedPeriod = $selectedYear . '-' . $selectedMonth;
+
+        // Calculate transactions for the selected month
+        $pemasukan = saldo_sum('income', $selectedPeriod);
+        $pengeluaran = saldo_sum('expense', $selectedPeriod);
+        $akumulasi = saldo_sum('selisih', $selectedPeriod);
+        $saldoAkhirBulanIni = $saldoAwalBulan + $pemasukan - $pengeluaran;
 
         // Store raw values for charts
         $pemasukanRaw = $pemasukan;
         $pengeluaranRaw = $pengeluaran;
 
         // Format values for display after calculations are complete
+        $saldoAwalBulanKemarin = rupiah($saldoAwalBulan);
         $pemasukan = rupiah($pemasukan);
         $pengeluaran = rupiah($pengeluaran);
         $akumulasi = rupiah($akumulasi);
-        $saldoAkhirBulanIni = rupiah($saldoAkhirBulanIni);
+        $saldoAkhirBulan = rupiah($saldoAkhirBulanIni);
 
-        // Ambil semua kategori dan total pengeluaran/income bulan ini
-        $kategoriExpense = Category::whereHas('transactions', function ($query) use ($bulans, $tahun) {
-            $query->whereMonth('date_trx', $bulans)
-                ->whereYear('date_trx', $tahun)
+        // Get all expense categories and totals for the selected month
+        $kategoriExpense = Category::whereHas('transactions', function ($query) use ($selectedMonth, $selectedYear) {
+            $query->whereMonth('date_trx', $selectedMonth)
+                ->whereYear('date_trx', $selectedYear)
                 ->where('is_expense', 1);
         })
-            ->withSum(['transactions' => function ($query) use ($bulans, $tahun) {
-                $query->whereMonth('date_trx', $bulans)
-                    ->whereYear('date_trx', $tahun)
+            ->withSum(['transactions' => function ($query) use ($selectedMonth, $selectedYear) {
+                $query->whereMonth('date_trx', $selectedMonth)
+                    ->whereYear('date_trx', $selectedYear)
                     ->where('is_expense', 1);
             }], 'amount')
             ->get();
 
-        // Ambil semua kategori dan total income bulan ini
-        $kategoriIncome = Category::whereHas('transactions', function ($query) use ($bulans, $tahun) {
-            $query->whereMonth('date_trx', $bulans)
-                ->whereYear('date_trx', $tahun)
+        // Get all income categories and totals for the selected month
+        $kategoriIncome = Category::whereHas('transactions', function ($query) use ($selectedMonth, $selectedYear) {
+            $query->whereMonth('date_trx', $selectedMonth)
+                ->whereYear('date_trx', $selectedYear)
                 ->where('is_expense', 0);
         })
-            ->withSum(['transactions' => function ($query) use ($bulans, $tahun) {
-                $query->whereMonth('date_trx', $bulans)
-                    ->whereYear('date_trx', $tahun)
+            ->withSum(['transactions' => function ($query) use ($selectedMonth, $selectedYear) {
+                $query->whereMonth('date_trx', $selectedMonth)
+                    ->whereYear('date_trx', $selectedYear)
                     ->where('is_expense', 0);
             }], 'amount')
             ->get();
@@ -154,7 +169,7 @@ class LaporanController extends Controller
         $labelsExpense = $kategoriExpense->pluck('name')->toArray();
         $dataExpense = $kategoriExpense->pluck('transactions_sum_amount')->map(fn($val) => (float) $val)->toArray();
 
-        // Generate some colors for the charts
+        // Generate colors for the charts
         $colorsIncome = [];
         $colorsExpense = [];
 
@@ -169,6 +184,9 @@ class LaporanController extends Controller
 
         return view('laporan.bulanan', compact(
             'title',
+            'selectedMonth',
+            'selectedYear',
+            'saldoAwalBulan',
             'saldoAwalBulanKemarin',
             'pemasukan',
             'pengeluaran',
@@ -186,7 +204,6 @@ class LaporanController extends Controller
             'pengeluaranRaw'
         ));
     }
-
     private function getRandomColor($seed = null)
     {
         $colors = [

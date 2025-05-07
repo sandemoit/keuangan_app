@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\FinancialReminder;
 use Illuminate\Http\Request;
 
@@ -12,13 +13,19 @@ class FinancialReminderController extends Controller
      */
     public function index()
     {
-        $reminders = FinancialReminder::where('is_active', true)
+        $reminders = FinancialReminder::whereHas('category', function ($query) {
+            $query->where('is_active', true);
+        })
             ->select('id', 'name', 'day_of_month', 'description', 'nominal', 'is_active')
             ->orderBy('day_of_month')
             ->get();
         $title = 'Pengingat Keuangan';
+        $kategoriKeluar = Category::where('is_expense', 1)
+            ->select('id', 'name')
+            ->orderBy('name')
+            ->get();
 
-        return view('reminders.index', compact('reminders', 'title'));
+        return view('reminders.index', compact('reminders', 'title', 'kategoriKeluar'));
     }
 
     /**

@@ -19,4 +19,9 @@ class Category extends Model
     {
         return $this->hasMany(Transaction::class);
     }
+
+    public function reminder(): HasMany
+    {
+        return $this->hasMany(FinancialReminder::class);
+    }
 }

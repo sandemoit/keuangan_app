@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('financial_reminders', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->unsignedTinyInteger('day_of_month');
             $table->text('description')->nullable();
             $table->integer('nominal');

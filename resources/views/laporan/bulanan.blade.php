@@ -6,6 +6,37 @@
             }
         }
     </style>
+    <div class="w-full bg-white rounded-xl shadow-sm p-3 mb-4">
+        <form id="filterForm" action="{{ route('laporan.bulanan') }}" method="GET">
+            <div class="flex flex-col md:flex-row items-center gap-4">
+                <div class="relative w-full md:w-auto">
+                    <select name="month" id="month"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full">
+                        @foreach (range(1, 12) as $month)
+                            <option value="{{ sprintf('%02d', $month) }}"
+                                {{ $selectedMonth == sprintf('%02d', $month) ? 'selected' : '' }}>
+                                {{ date('F', mktime(0, 0, 0, $month, 1)) }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="relative w-full md:w-auto">
+                    <select name="year" id="year"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full">
+                        @foreach (range(date('Y'), date('Y') - 5) as $year)
+                            <option value="{{ $year }}" {{ $selectedYear == $year ? 'selected' : '' }}>
+                                {{ $year }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <button type="submit"
+                    class="w-full md:w-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                    Filter
+                </button>
+            </div>
+        </form>
+    </div>
 
     {{-- ringkasan --}}
     <div class="grid grid-cols-2 gap-4">
@@ -37,7 +68,8 @@
 
                     <tr class="bg-gray-100 font-bold border-b">
                         <td class="px-4 py-2 text-right" colspan="4">Akumulasi</td>
-                        <td class="px-4 py-2 text-right {{ $akumulasi < 0 ? 'text-red-700' : '' }}">{{ $akumulasi }}
+                        <td class="px-4 py-2 text-right {{ $akumulasi < 0 ? 'text-red-700' : '' }}">
+                            {{ $akumulasi }}
                         </td>
                     </tr>
 

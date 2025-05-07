@@ -48,15 +48,29 @@
                                 placeholder="500000" required />
                         </div>
 
-                        <!-- Deskripsi (opsional) -->
+                        <!-- Nominal -->
                         <div class="group">
-                            <label for="description"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi
-                                (Opsional)</label>
-                            <textarea name="description" id="description" rows="3"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                                placeholder="Contoh: Transfer ke pemilik kontrakan..."></textarea>
+                            <label for="nominal" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                Kategori
+                            </label>
+                            <select id="kategori" name="kategori"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option selected disabled>Silakan pilih</option>
+                                @foreach ($kategoriKeluar as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
+
+                        <!-- Deskripsi (opsional) -->
+                    </div>
+                    <div class="group">
+                        <label for="description"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi
+                            (Opsional)</label>
+                        <textarea name="description" id="description" rows="3"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                            placeholder="Contoh: Transfer ke pemilik kontrakan..."></textarea>
                     </div>
 
                     <!-- Tombol Simpan -->
@@ -163,6 +177,6 @@
                 });
             });
         </script>
-        <script src="{{ asset('js/reminders.js') }}"></script>
+        {{-- <script src="{{ asset('js/reminders.js') }}"></script> --}}
     @endpush
 </x-master-layout>
