@@ -13,7 +13,7 @@
             </button>
         </h2>
         <div id="accordion-collapse-body-1" class="hidden" aria-labelledby="accordion-collapse-heading-1">
-            <div class="p-5 border border-t-0 rounded-b-xl border-gray-200 dark:border-gray-700 bg-white">
+            <div class="p-5 shadow-sm bg-white">
                 <form class="w-full" method="POST" action="{{ route('reminder-keuangan.store') }}">
                     @csrf
                     <div class="grid md:grid-cols-2 gap-4">
