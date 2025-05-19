@@ -13,8 +13,8 @@
                 <!-- Logo -->
                 <a href="/" class="flex ml-2 md:mr-24">
                     <i class="fas fa-wallet text-white text-2xl mr-3"></i>
-                    <span
-                        class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-white">FinanceTracker</span>
+                    <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-white">SansFams
+                        Finance</span>
                 </a>
             </div>
 

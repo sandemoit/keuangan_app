@@ -67,12 +67,12 @@
                         class="inline-flex items-center justify-center px-2 text-sm font-medium text-gray-800 bg-green-200 rounded-full">New</span>
                 </a>
             </li>
-            <li>
+            {{-- <li>
                 <a href="{{ route('reminder-keuangan.index') }}" class="menu-item active-menu-item">
                     <i class="fas fa-coins"></i>
                     <span class="ml-3">Reminder Keuangan</span>
                 </a>
-            </li>
+            </li> --}}
             <h3 class="text-xs leading-[20px] text-gray-400 uppercase">PENGATURAN</h3>
             <li>
                 <a href="{{ route('category.index') }}" class="menu-item">

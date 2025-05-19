@@ -17,7 +17,7 @@ class DashboardController extends Controller
         $tahun = $now->year;
 
         $title = 'Dashboard';
-        $totalSaldo = rupiah(saldo_sum('saldo', date('Y-m')));
+        $totalSaldo = rupiah(saldo_sum('saldo'));
         $selisih = rupiah(saldo_sum('selisih', date('Y-m')));
         $income = rupiah(saldo_sum('income', date('Y-m')));
         $expense = rupiah(saldo_sum('expense', date('Y-m')));

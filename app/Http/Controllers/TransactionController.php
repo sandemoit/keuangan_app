@@ -7,6 +7,8 @@ use App\Models\Target;
 use App\Models\Transaction;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class TransactionController extends Controller
 {
@@ -53,23 +55,30 @@ class TransactionController extends Controller
             'tanggal' => 'required',
             'payment_method' => 'required',
             'tipe' => 'required',
-            'deskripsi' => 'required',
         ]);
 
-        $validated['user_id'] = 1;
+        try {
+            DB::beginTransaction();
 
-        Transaction::create([
-            'user_id' => $validated['user_id'],
-            'category_id' => request('kategori') ?? 3,
-            'amount' => $validated['nominal'],
-            'date_trx' => Carbon::createFromFormat('d-m-Y', $validated['tanggal'])->format('Y-m-d'),
-            'payment_method' => $validated['payment_method'],
-            'type' => $validated['tipe'] == 'target' ? 'expense' : $validated['tipe'],
-            'description' => $validated['deskripsi'],
-            'target_id' => $request->target_keuangan
-        ]);
+            Transaction::create([
+                'user_id' => 1,
+                'category_id' => request('kategori') ?? 3,
+                'amount' => $validated['nominal'],
+                'date_trx' => Carbon::createFromFormat('d-m-Y', $validated['tanggal'])->format('Y-m-d'),
+                'payment_method' => $validated['payment_method'],
+                'type' => $validated['tipe'] == 'target' ? 'expense' : $validated['tipe'],
+                'description' => $request->deskripsi,
+                'target_id' => $request->tipe == 'target' ? $request->target_keuangan : null
+            ]);
 
-        return response()->json(['success' => true, 'message' => 'Transaksi berhasil dibuat']);
+            DB::commit();
+
+            return response()->json(['success' => true, 'message' => 'Transaksi berhasil dibuat']);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Gagal membuat transaksi'], 500);
+        }
     }
 
     /**
@@ -99,7 +108,6 @@ class TransactionController extends Controller
             'tanggal' => 'required',
             'payment_method' => 'required',
             'tipe' => 'required',
-            'deskripsi' => 'required',
         ]);
 
         $transaction = Transaction::findOrFail($id);
@@ -111,7 +119,7 @@ class TransactionController extends Controller
             'date_trx' => Carbon::parse($validated['tanggal'])->format('Y-m-d'),
             'payment_method' => $validated['payment_method'],
             'type' => $validated['tipe'],
-            'description' => $validated['deskripsi'],
+            'description' => $request->deskripsi,
         ]);
 
         return response()->json(['success' => true, 'message' => 'Transaksi berhasil diupdate']);
