@@ -73,6 +73,17 @@
                     <span class="ml-3">Reminder Keuangan</span>
                 </a>
             </li>
+            <li>
+                <a href="{{ route('reminder-keuangan.index') }}" class="menu-item active-menu-item">
+                    <i class="fas fa-coins"></i>
+                    <span class="ml-3">Reminder Keuangan</span>
+                </a>
+            </li>
+            <a href="{{ route('summary') }}" class="menu-item active-menu-item">
+                <i class="fas fa-coins"></i>
+                <span class="ml-3">Summary AI</span>
+            </a>
+            </li>
             <h3 class="text-xs leading-[20px] text-gray-400 uppercase">PENGATURAN</h3>
             <li>
                 <a href="{{ route('category.index') }}" class="menu-item">

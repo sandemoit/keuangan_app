@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FinancialReminderController;
 use App\Http\Controllers\KeuanganController;
 use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\SummaryController;
 use App\Http\Controllers\TargetController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
@@ -32,3 +33,8 @@ Route::get('/keuangan/keluar', [KeuanganController::class, 'keluar'])->name('keu
 Route::resource('/target-keuangan', TargetController::class);
 
 Route::resource('/reminder-keuangan', FinancialReminderController::class);
+
+
+Route::get('/summary', [SummaryController::class, 'index'])->name('summary');
+Route::post('/ai-summary', [SummaryController::class, 'generateSummary']);
+// routes/api.php
