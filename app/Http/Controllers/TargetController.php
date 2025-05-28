@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Target;
+use App\Models\Transaction;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class TargetController extends Controller
 {
@@ -12,7 +17,7 @@ class TargetController extends Controller
         $title = 'Target Keuangan';
 
         $targetList = Target::with('transactions') // load relasi biar efisien
-            ->where('status', 'open')
+            // ->where('status', 'open')
             ->select('id', 'name', 'target_amount', 'status', 'deleted_at')
             ->get()
             ->map(function ($target) {
@@ -50,7 +55,34 @@ class TargetController extends Controller
         }
     }
 
-    public function update(Request $request, string $id) {}
+    public function update(string $id)
+    {
+        DB::beginTransaction();
+
+        try {
+            $target = Target::findOrFail($id);
+            $target->update(['status' => 'withdraw']);
+
+            Transaction::create([
+                'user_id' => 1,
+                'category_id' => Category::where('is_expense', 0)->value('id'),
+                'amount' => $target->target_amount,
+                'date_trx' => Carbon::now()->format('Y-m-d'),
+                'payment_method' => 'bank transfer',
+                'type' => 'income',
+                'description' => 'Cairkan Target ' . $target->name,
+                'target_id' => $id
+            ]);
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Target berhasil diupdate menjadi withdraw.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan, silahkan coba lagi.');
+        }
+    }
 
     public function destroy(string $id)
     {

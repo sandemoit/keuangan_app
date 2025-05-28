@@ -19,8 +19,7 @@ Route::delete('/transaksi/{id}', [TransactionController::class, 'destroy'])->nam
 Route::get('/get-kategori', function () {
   $kategori = \App\Models\Category::where('is_expense', request('is_expense'))->get();
   return response()->json($kategori);
-});
-
+})->name('get-kategori');
 
 Route::resource('/category', CategoryController::class);
 

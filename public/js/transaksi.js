@@ -215,15 +215,17 @@ $(document).ready(function () {
         if (tipe === 'target') {
             // Disable dan clear kategori
             $('#kategori').prop('disabled', true).empty().append('<option selected>Tidak tersedia</option>');
+            $('#target_keuangan').prop('disabled', false);
             return;
         }
 
         // Jika bukan target, enable kategori dan fetch data
         $('#kategori').prop('disabled', false);
+        $('#target_keuangan').prop('disabled', true);
         const is_expense = (tipe === 'expense') ? 1 : 0;
 
         $.ajax({
-            url: '/get-kategori',
+            url: 'get-kategori',
             method: 'GET',
             data: { is_expense: is_expense },
             success: function (res) {

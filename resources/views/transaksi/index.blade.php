@@ -62,9 +62,9 @@
                             <select id="tipe" name="tipe"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <option disabled selected>Pilih tipe</option>
-                                <option value="income">Pemasukan</option>
-                                <option value="expense">Pengeluaran</option>
-                                <option value="target">Target</option>
+                                <option value="income">Pemasukan (+)</option>
+                                <option value="expense">Pengeluaran (-)</option>
+                                <option value="target">Target (-)</option>
                             </select>
                         </div>
                         <div class="group">
@@ -96,7 +96,7 @@
                             <label for="kategori"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kategori</label>
                             <select id="kategori" name="kategori" disabled
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                class="disabled:opacity-50 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <option selected>Silakan pilih tipe terlebih dahulu</option>
                             </select>
                         </div>
@@ -115,8 +115,8 @@
                             <label for="target_keuangan"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Target Keuangan
                                 (Tidak Wajib)</label>
-                            <select id="target_keuangan" name="target_keuangan"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <select id="target_keuangan" name="target_keuangan" disabled
+                                class="disabled:opacity-50 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <option disabled selected>Pilih jika ada</option>
                                 @foreach ($targetKeuangan as $target)
                                     <option value="{{ $target->id }}">{{ $target->name }}</option>
